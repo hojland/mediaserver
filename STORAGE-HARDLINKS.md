@@ -38,3 +38,13 @@ This is a filesystem limitation, not a config bug; no Docker or *arr setting can
 
 Because the /data mount + root-folder paths already match what hardlinks need, no further app
 reconfiguration is required after the reformat.
+
+## ACTIVE: Option A enabled (2026-07-07)
+Move-not-copy behaviour is now in effect so downloads no longer pile up:
+- Sonarr & Radarr qBittorrent client: "Remove Completed Downloads" = ON (was already on).
+- qBittorrent: `Session\GlobalMaxRatio=0` + `Session\ShareLimitAction=Stop`
+  (set in qBittorrent.conf; backup at `qBittorrent.conf.pre-ratiolimit.bak`).
+
+Flow: download completes -> qB stops it immediately (ratio 0) -> *arr imports (copies to
+library) -> *arr removes the completed torrent + its files from downloads. Net: one copy.
+No seeding (fine for public trackers). Raise GlobalMaxRatio if you want to seed.
