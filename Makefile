@@ -1,8 +1,10 @@
+COMPOSE = docker compose -f docker-compose-plex.yml
+
 down:
-	docker-compose down
+	$(COMPOSE) down
 
 up:
-	docker-compose up -d
+	$(COMPOSE) up -d
 
 full:
 	make down
